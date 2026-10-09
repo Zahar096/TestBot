@@ -29,7 +29,7 @@ bot.command('course', async (ctx) => {
 
  bot.action('btn_1', async (ctx) => {
     try {
- await ctx.replyWithHTML('Обработка кнопки 1',{
+ await ctx.replyWithHTML('Введите название компании; \n раскажите что хотите рекламировать;\n и напишите свой номер телефона',{
    
 })
     } catch (e) {
