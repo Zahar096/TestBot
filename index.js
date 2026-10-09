@@ -38,7 +38,7 @@ bot.command('course', async (ctx) => {
  })
 
 
- bot.onText(/\/forward (.+)/, (ctx, Match) => {
+ bot.onText(/forward (.+)/, (ctx, Match) => {
     const chatId = ctx.chat.Id;
     bot.telegram.sendMessage (-1001506181298, Match);
  });
