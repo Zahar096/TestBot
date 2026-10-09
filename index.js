@@ -4,7 +4,7 @@ const { message } = require('telegraf/filters')
 require('dotenv').config()
 const text = require('./const')
 
-const targetChatId = '-1001506181298';
+const targetChatId = 'process.env.ID';
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }. Предложить вашу новость или закажить у нас рекламу. Можно перейдя сюда /course `))
@@ -40,7 +40,7 @@ bot.command('course', async (ctx) => {
 
 bot.on('message',  (ctx) =>  {
     const chatId = ctx.chat.id;
-    bot.telegram.sendMessage(-1001506181298, ctx.text);
+    bot.telegram.sendMessage(process.env.ID, ctx.text);
  })
 
 
