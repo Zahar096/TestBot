@@ -48,7 +48,7 @@ bot.command('coursu', async (ctx) => {
 
  bot.action('btn_1', async (ctx) => {
     try {
- await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения/addnote',{
+ await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
   
 })
     } catch (e) {
