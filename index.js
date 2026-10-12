@@ -48,7 +48,7 @@ bot.command('coursu', async (ctx) => {
 
  bot.action('btn_1', async (ctx) => {
     try {
- await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении /addnote',{
+ await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения/addnote',{
   
 })
     } catch (e) {
@@ -70,7 +70,7 @@ bot.on('text', async (ctx) => {
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
-  const forwardTo = process.env.ID;
+  const forwardTo = 'process.env.ID';
 
   // Отправляем «готовое» сообщение с вписанным текстом
   await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}`);
