@@ -46,12 +46,12 @@ bot.command('course', async (ctx) => {
 
 
 bot.command('report', (ctx) => {
-  userStage[ctx.from.id] = 'waiting_order_id';
+  userStage[ctx.process.env.ID] = 'waiting_order_id';
   ctx.reply('Укажите ID заказа (только цифры), чтобы сформировать отчёт:');
 });
 
 bot.on('text', async (ctx) => {
-  const userId = ctx.from.id;
+  const userId = ctx.process.env.ID;
   if (userStage[userId] === 'waiting_order_id') {
     const orderId = ctx.message.text.trim();
     const forwardTo = process.env.ID;
