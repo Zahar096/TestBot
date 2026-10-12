@@ -18,7 +18,7 @@ bot.command('course', async (ctx) => {
     try{
    await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
 [
-    [Markup.button.callback('Разместить рекламу', 'btn_1'), Markup.button.callback('Сообщить новость','btn_2')]
+    [Markup.button.callback('Разместить рекламу /addnote', 'btn_1'), Markup.button.callback('Сообщить новость','btn_2')]
 ]
     ))
     } catch (e) {
@@ -31,15 +31,7 @@ bot.command('course', async (ctx) => {
 
 
 
- bot.action('btn_1', async (ctx) => {
-    try {
- await ctx.replyWithHTML('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.',{
-   
-})
-    } catch (e) {
-      console.error(e)
-    }
- })
+
 
 
 
@@ -50,7 +42,7 @@ const userStage = {};
 
 bot.command('addnote', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
-  ctx.reply('Напишите текст заметки — я его сохраню и перешлю в канал.');
+  ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
 bot.on('text', async (ctx) => {
