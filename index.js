@@ -39,7 +39,17 @@ bot.command('coursu', async (ctx) => {
 })
 
 
-
+bot.command('addnote', async (ctx) => {
+    try{
+   await ctx.replyWithHTML('<b> Форму заполнения нужно составить в одном сообщении  </b>', Markup.inlineKeyboard(
+[
+    [Markup.button.callback('Сообщить новость','btn_3')]
+]
+    ))
+    } catch (e) {
+        console.error(e)
+    }
+})
 
 
 
@@ -62,7 +72,7 @@ const userStage = {};
 
 bot.command('addnote', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
-  ctx.reply('Напишите текст заметки — я его сохраню и перешлю в канал.');
+  ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
 bot.on('text', async (ctx) => {
@@ -70,14 +80,16 @@ bot.on('text', async (ctx) => {
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
-  const forwardTo = process.env.FORWARD_TO_CHAT_ID;
+  const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `📝 Новая заметка:\n\n${text}`);
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}`);
 
   delete userStage[userId]; // сбрасываем состояние
-  ctx.reply('Заметка отправлена!');
+  ctx.reply('Замявка на рекламу отправлена!');
 });
+
+
 
 
 
