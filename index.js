@@ -73,7 +73,7 @@ bot.on('text', async (ctx) => {
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}, Сообщение от пользователя:\n\n${ctx.message.from.first_name},Связаться:\n\n${ctx.message.from.id}`);
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}\n Отправитель: @${ctx.from.username || 'неизвестно'}`);
 
 
   delete userStage[userId]; // сбрасываем состояние
