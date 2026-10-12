@@ -75,7 +75,6 @@ bot.on('text', async (ctx) => {
   // Отправляем «готовое» сообщение с вписанным текстом
   await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}`);
 
-
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Замявка на рекламу отправлена!');
 });
