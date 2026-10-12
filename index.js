@@ -53,6 +53,21 @@ bot.command('report', (ctx) => {
   ctx.reply('Укажите ID заказа (только цифры), чтобы сформировать отчёт:');
 });
 
+bot.on('text', async (ctx) => {
+  const userId = ctx.from.id;
+  if (userStage[userId] === 'waiting_order_id') {
+    const orderId = ctx.message.text.trim();
+    const forwardTo = process.env.ID;
+
+  
+    const reportText = `Отчёт по заказу:\nID: ${orderId}\nСтатус: в обработке\nПриоритет: высокий`;
+
+    await bot.telegram.sendMessage(forwardTo, reportText);
+
+    delete userStage[userId];
+    ctx.reply('Отчёт сформирован и отправлен.');
+  }
+});
 
 
 
