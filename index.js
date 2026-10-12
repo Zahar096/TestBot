@@ -12,19 +12,26 @@ bot.help((ctx) => ctx.reply(text.commands))
 bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
 
 
+bot.command('course', async (ctx) => {
+    try{
+   await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
+[
+    [Markup.button.callback('Разместить рекламу', 'btn_1'), Markup.button.callback('Сообщить новость','btn_2')]
+]
+    ))
+    } catch (e) {
+        console.error(e)
+    }
+})
 
 
 
-bot.command('forward', (ctx) => {
-  forwardingUsers.add(ctx.from.id);
-  ctx.reply('Режим пересылки включён. Напиши /stop, чтобы выключить.');
-});
 
 
 
  bot.action('btn_1', async (ctx) => {
     try {
- await ctx.replyWithHTML('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.',{
+ await ctx.replyWithHTML('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона. В одном сообщении',{
    
 })
     } catch (e) {
@@ -33,11 +40,13 @@ bot.command('forward', (ctx) => {
  })
 
 
-bot.on('message',  (ctx) =>  {
-    const chatId = ctx.chat.id;
-    bot.telegram.sendMessage(process.env.ID, ctx.text);
- })
-
+bot.command('forward', (ctx) => {
+  const args = ctx.message.text.split(' ').slice(1); 
+  if (!args.length) {
+    ctx.reply('/forward 7,8');
+    return;
+  }
+  })
 
 
 bot.launch()
