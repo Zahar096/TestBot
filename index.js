@@ -65,7 +65,7 @@ bot.command('addnote', (ctx) => {
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
-bot.on('message', async (ctx) => {
+bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
@@ -73,7 +73,12 @@ bot.on('message', async (ctx) => {
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}`);
+
+try {
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\${text}`);
+} catch (error) {
+  console.error('Ошибка отправки:', error.response?.error_description || error.message);
+}
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Замявка на рекламу отправлена!');
