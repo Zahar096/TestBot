@@ -48,7 +48,10 @@ bot.on('message',  (ctx) =>  {
  })
 
 
-
+bot.command('report', (ctx) => {
+  userStage[ctx.from.id] = 'waiting_order_id';
+  ctx.reply('Укажите ID заказа (только цифры), чтобы сформировать отчёт:');
+});
 
 
 
