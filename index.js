@@ -7,12 +7,14 @@ const text = require('./const')
 const targetChatId = 'process.env.ID';
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
-bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложить вашу новость или закажить у нас рекламу. Можно перейдя сюда /course `))
+bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложите вашу новость или закажите у нас рекламу. `))
 bot.help((ctx) => ctx.reply(text.commands))
-bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
+
+// bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
 
 
-bot.command('course', async (ctx) => {
+
+bot.start( async (ctx) => {
     try{
    await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
 [
@@ -31,7 +33,7 @@ bot.command('course', async (ctx) => {
 
  bot.action('btn_1', async (ctx) => {
     try {
- await ctx.replyWithHTML('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона. В одном сообщении',{
+ await ctx.replyWithHTML('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.',{
    
 })
     } catch (e) {
@@ -40,13 +42,14 @@ bot.command('course', async (ctx) => {
  })
 
 
-bot.command('forward', (ctx) => {
-  const args = ctx.message.text.split(' ').slice(1); 
-  if (!args.length) {
-    ctx.reply('/forward 7,8');
-    return;
-  }
-  })
+bot.on('message',  (ctx) =>  {
+    const chatId = ctx.chat.id;
+    bot.telegram.sendMessage(process.env.ID, ctx.text);
+ })
+
+
+
+
 
 
 bot.launch()
