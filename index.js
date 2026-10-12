@@ -39,17 +39,7 @@ bot.command('coursu', async (ctx) => {
 })
 
 
-bot.command('addnote', async (ctx) => {
-    try{
-   await ctx.replyWithHTML('<b> Форму заполнения нужно составить в одном сообщении  </b>', Markup.inlineKeyboard(
-[
-    [Markup.button.callback('Сообщить новость','btn_3')]
-]
-    ))
-    } catch (e) {
-        console.error(e)
-    }
-})
+
 
 
 
