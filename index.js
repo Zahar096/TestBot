@@ -42,10 +42,7 @@ bot.command('course', async (ctx) => {
  })
 
 
-bot.on('message',  (ctx) =>  {
-    const chatId = ctx.chat.id;
-    bot.telegram.sendMessage(process.env.ID, ctx.text);
- })
+
 
 
 bot.command('report', (ctx) => {
