@@ -70,7 +70,7 @@ bot.on('text', async (ctx) => {
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
-  const forwardTo = 'from.id';
+  const forwardTo = process.env.FORWARD_TO_CHAT_ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
   await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}`);
