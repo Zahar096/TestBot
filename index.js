@@ -61,16 +61,16 @@ bot.command('coursu', async (ctx) => {
 const userStage = {}; 
 
 bot.command('addnote', (ctx) => {
-  userStage[ctx.process.env.ID] = 'waiting_for_text';
+  userStage[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
 bot.on('text', async (ctx) => {
-  const userId = ctx.process.env.ID;
+  const userId = ctx.from.id;
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
-  const forwardTo = 'process.env.ID';
+  const forwardTo = 'from.id';
 
   // Отправляем «готовое» сообщение с вписанным текстом
   await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n${text}`);
