@@ -7,7 +7,7 @@ const text = require('./const')
 const targetChatId = 'process.env.ID';
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
-bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложить вашу новость или закажить у нас рекламу. Можно перейдя сюда /course `))
+bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложить вашу новость или закажить у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /btn_1 \n РАЗМЕСТИТЬ НОВОСТЬ /btn_2`))
 bot.help((ctx) => ctx.reply(text.commands))
 
 // bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
@@ -33,7 +33,7 @@ bot.command('course', async (ctx) => {
 
  bot.action('btn_1', async (ctx) => {
     try {
- await ctx.replyWithHTML('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона. В одном сообщении нажав на команду /addnote',{
+ await ctx.replyWithHTML('Перейдите в форму заполнения которую нужно составить в одном сообщении /addnote',{
    
 })
     } catch (e) {
@@ -57,10 +57,10 @@ bot.on('text', async (ctx) => {
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, ` Новая заметка:\n\n${text}`);
+  await bot.telegram.sendMessage(forwardTo, ` Новая рекламная заявка:\n\n${text}`);
 
   delete userStage[userId]; // сбрасываем состояние
-  ctx.reply('Заметка отправлена!');
+  ctx.reply('Замявка на рекламу отправлена!');
 });
 
 
