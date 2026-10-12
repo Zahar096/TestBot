@@ -82,13 +82,7 @@ bot.on('text', async (ctx) => {
 
 
 
-if (ctx.message.reply_to_message) {
-  const original = ctx.message.reply_to_message;
-  const forwardTo = process.env.ID;
-  
-  // Вариант 1: переслать оригинал (сохраняет авторство и медиа)
-  await bot.telegram.forwardMessage(forwardTo, original.chat.id, original.message_id);
-}
+
 
 
 
