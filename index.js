@@ -45,26 +45,28 @@ bot.command('course', async (ctx) => {
 
 
 
-bot.command('report', (ctx) => {
-  userStage[ctx.process.env.ID] = 'waiting_order_id';
-  ctx.reply('Укажите ID заказа (только цифры), чтобы сформировать отчёт:');
+
+const userStage = {}; 
+
+bot.command('addnote', (ctx) => {
+  userStage[ctx.from.id] = 'waiting_for_text';
+  ctx.reply('Напишите текст заметки — я его сохраню и перешлю в канал.');
 });
 
 bot.on('text', async (ctx) => {
-  const userId = ctx.process.env.ID;
-  if (userStage[userId] === 'waiting_order_id') {
-    const orderId = ctx.message.text.trim();
-    const forwardTo = process.env.ID;
+  const userId = ctx.from.id;
+  if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
-  
-    const reportText = `Отчёт по заказу:\nID: ${orderId}\nСтатус: в обработке\nПриоритет: высокий`;
+  const text = ctx.message.text;
+  const forwardTo = process.env.FORWARD_TO_CHAT_ID;
 
-    await bot.telegram.sendMessage(forwardTo, reportText);
+  // Отправляем «готовое» сообщение с вписанным текстом
+  await bot.telegram.sendMessage(forwardTo, `📝 Новая заметка:\n\n${text}`);
 
-    delete userStage[userId];
-    ctx.reply('Отчёт сформирован и отправлен.');
-  }
+  delete userStage[userId]; // сбрасываем состояние
+  ctx.reply('Заметка отправлена!');
 });
+
 
 
 
