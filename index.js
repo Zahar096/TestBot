@@ -61,12 +61,12 @@ bot.command('coursu', async (ctx) => {
 const userStage = {}; 
 
 bot.command('addnote', (ctx) => {
-  userStage[ctx.from.id] = 'waiting_for_text';
+  userStage[ctx.process.env.ID] = 'waiting_for_text';
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
 bot.on('text', async (ctx) => {
-  const userId = ctx.from.id;
+  const userId = ctx.process.env.ID;
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
