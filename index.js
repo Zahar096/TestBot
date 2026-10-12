@@ -14,7 +14,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 
-bot.start('start', async (ctx) => {
+bot.start('/start', async (ctx) => {
     try{
    await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
 [
