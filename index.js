@@ -46,7 +46,7 @@ bot.command('coursu', async (ctx) => {
 
 
 
- bot.action('btn_1','btn_2', async (ctx) => {
+ bot.action('btn_1', async (ctx) => {
     try {
  await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
   
@@ -55,6 +55,20 @@ bot.command('coursu', async (ctx) => {
       console.error(e)
     }
  })
+
+
+
+
+  bot.action('btn_2', async (ctx) => {
+    try {
+ await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
+  
+})
+    } catch (e) {
+      console.error(e)
+    }
+ })
+
 
 
 
