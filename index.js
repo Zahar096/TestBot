@@ -73,13 +73,22 @@ bot.on('text', async (ctx) => {
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'} \nID: ${ctx.from.id}`);
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
 
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Замявка на рекламу отправлена!');
 });
 
+
+
+if (ctx.message.reply_to_message) {
+  const original = ctx.message.reply_to_message;
+  const forwardTo = process.env.ID;
+  
+  // Вариант 1: переслать оригинал (сохраняет авторство и медиа)
+  await bot.telegram.forwardMessage(forwardTo, original.chat.id, original.message_id);
+}
 
 
 
