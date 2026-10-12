@@ -11,20 +11,14 @@ bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_
 bot.help((ctx) => ctx.reply(text.commands))
 bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
 
-bot.command('course', async (ctx) => {
-    try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
-[
-    [Markup.button.callback('Разместить рекламу', 'btn_1'),
-         Markup.button.callback('Сообщить новость','btn_2')]
-]
-    ))
-    } catch (e) {
-        console.error(e)
-    }
-})
 
 
+
+
+bot.command('forward', (ctx) => {
+  forwardingUsers.add(ctx.from.id);
+  ctx.reply('Режим пересылки включён. Напиши /stop, чтобы выключить.');
+});
 
 
 
