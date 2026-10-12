@@ -58,10 +58,10 @@ bot.on('text', async (ctx) => {
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
-  const forwardTo = process.env.FORWARD_TO_CHAT_ID;
+  const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `📝 Новая заметка:\n\n${text}`);
+  await bot.telegram.sendMessage(forwardTo, ` Новая заметка:\n\n${text}`);
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Заметка отправлена!');
