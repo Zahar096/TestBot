@@ -16,7 +16,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 bot.command('course', async (ctx) => {
     try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
+   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
 [
     [Markup.button.callback('Разместить рекламу', 'btn_1')]
 ]
@@ -28,7 +28,7 @@ bot.command('course', async (ctx) => {
 
 bot.command('coursu', async (ctx) => {
     try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения под вашу нужду </b>', Markup.inlineKeyboard(
+   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
 [
     [Markup.button.callback('Сообщить новость','btn_2')]
 ]
@@ -38,6 +38,18 @@ bot.command('coursu', async (ctx) => {
     }
 })
 
+
+bot.command('addnote', async (ctx) => {
+    try{
+   await ctx.replyWithHTML('<b> Форму заполнения нужно составить в одном сообщении  </b>', Markup.inlineKeyboard(
+[
+    [Markup.button.callback('Сообщить новость','btn_3')]
+]
+    ))
+    } catch (e) {
+        console.error(e)
+    }
+})
 
 
 
@@ -55,6 +67,7 @@ bot.command('coursu', async (ctx) => {
  })
 
 
+ 
 const userStage = {}; 
 
 bot.command('addnote', (ctx) => {
