@@ -27,8 +27,6 @@ bot.command('course ', async (ctx) => {
     }
 })
 
-
-
 bot.command('coursu', async (ctx) => {
     try{
    await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
@@ -49,13 +47,20 @@ bot.command('coursu', async (ctx) => {
 
 
 
- bot.action('btn_1','btn_2', async (ctx) => 
+ bot.action('btn_1', async (ctx) => 
      {
  await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
   })
  })
 
 
+
+
+ bot.action('btn_2', async (ctx) => 
+     {
+ await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
+})
+ })
 
  
 
@@ -64,22 +69,22 @@ bot.command('coursu', async (ctx) => {
 
 const userStage = {}; 
 
-bot.command('addnote', async (ctx) => {
+bot.command('addnote', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
+});
 
 
-
-  const txet = ctx.message.text;
+  const text = ctx.message.text;
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${txet}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
 
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Заявка на рекламу отправлена!');
-});
+
 
 
 
@@ -87,10 +92,10 @@ bot.command('addnote', async (ctx) => {
 
 const userStag = {}; 
 
-bot.command('addnote1', async (ctx) => {
+bot.command('addnote1', (ctx) => {
   userStag[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Дата новости; \n\n Содержание новости;');
-
+});
 
 
   const tex = ctx.message.text;
@@ -102,7 +107,7 @@ bot.command('addnote1', async (ctx) => {
 
   delete userStag[userId]; // сбрасываем состояние
   ctx.reply('Новость отправлена!');
-});
+
 
 
 
