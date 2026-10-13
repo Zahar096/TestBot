@@ -76,7 +76,7 @@ const userStage = {};
 bot.command('addnote', async (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
-});
+
 
 
   const txet = ctx.message.text;
@@ -88,7 +88,7 @@ bot.command('addnote', async (ctx) => {
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Заявка на рекламу отправлена!');
-
+});
 
 
 
