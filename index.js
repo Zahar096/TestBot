@@ -79,11 +79,11 @@ bot.command('addnote', (ctx) => {
 });
 
 
-  const text = ctx.message.text;
+  const txet = ctx.message.text;
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${txet}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
 
 
   delete userStage[userId]; // сбрасываем состояние
