@@ -15,17 +15,25 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 
-bot.command('course ', async (ctx) => {
-    try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', inlineKeyboard(
-[
-    [inlineKeyboard.button.callback('Для рекламы', 'btn_1')]
-]
-    ))
-    } catch (e) {
-        console.error(e)
-    }
+
+
+
+bot.command ('rek ', async (ctx) => {
+ const inlineKeyboard = new inlineKeyboard()
+  .text ('Для рекламы', 'button_1');
+
+await ctx.reply('Перейдите в форму заполнения',{
+    reply_markup: inlineKeyboard
 })
+});
+
+bot.callbackQuery('button_1', async (ctx) => {
+  await ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
+  })
+})
+
+
+
 
 
 
