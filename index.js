@@ -1,6 +1,5 @@
 
-const { Telegraf} = require('telegraf')
-const { inlineKeyboard } = require('telegraf/inlineKeyboard');
+const { Telegraf, Markup} = require('telegraf')
 const { message } = require('telegraf/filters')
 require('dotenv').config()
 const text = require('./const')
@@ -19,11 +18,11 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 bot.command ('rek ', async (ctx) => {
- const inlineKeyboard = new inlineKeyboard()
+ const inlineKeyboard = new Markup.inlineKeyboard()
   .text ('Для рекламы', 'button_1');
 
 await ctx.reply('Перейдите в форму заполнения',{
-    reply_markup: inlineKeyboard
+    reply_markup: Markup.inlineKeyboard
 })
 });
 
@@ -39,7 +38,7 @@ bot.callbackQuery('button_1', async (ctx) => {
 
 bot.command('coursu', async (ctx) => {
     try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', inlineKeyboard(
+   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
 [
     [inlineKeyboard.button.callback('Сообщить новость', 'btn_2')]
 ]
