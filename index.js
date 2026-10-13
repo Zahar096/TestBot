@@ -82,7 +82,7 @@ bot.command('addnote', (ctx) => {
 });
 
 
-  const tex = ctx.message.text;
+  const tex = ctx.message.tex;
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
