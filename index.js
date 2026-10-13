@@ -76,17 +76,16 @@ bot.command('coursu', async (ctx) => {
 
 const userStage = {}; 
 
-bot.command('addnote', (ctx) => {
+bot.command('addnote', async (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${txet}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
 });
 
 
   const txet = ctx.message.text;
   const forwardTo = process.env.ID;
 
-  // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${txet}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.id}`);
 
 
   delete userStage[userId]; // сбрасываем состояние
