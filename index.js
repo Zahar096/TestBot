@@ -1,6 +1,6 @@
 
 const { Telegraf} = require('telegraf')
-const { Markup } = require('telegraf/markup');
+const { inlineKeyboard } = require('telegraf/markup');
 const { message } = require('telegraf/filters')
 require('dotenv').config()
 const text = require('./const')
@@ -17,9 +17,9 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 bot.command('course ', async (ctx) => {
     try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
+   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', inlineKeyboard(
 [
-    [Markup.button.callback('Для рекламы', 'btn_1')]
+    [inlineKeyboard.button.callback('Для рекламы', 'btn_1')]
 ]
     ))
     } catch (e) {
@@ -27,11 +27,13 @@ bot.command('course ', async (ctx) => {
     }
 })
 
+
+
 bot.command('coursu', async (ctx) => {
     try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
+   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', inlineKeyboard(
 [
-    [Markup.button.callback('Сообщить новость', 'btn_2')]
+    [inlineKeyboard.button.callback('Сообщить новость', 'btn_2')]
 ]
     ))
     } catch (e) {
@@ -50,20 +52,18 @@ bot.command('coursu', async (ctx) => {
  bot.action('btn_1', async (ctx) => 
      {
  await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
-  
-})
-  
+  })
  })
 
 
 
 
- bot.action('btn_1', async (ctx) => 
+
+
+ bot.action('btn_2', async (ctx) => 
      {
  await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
-  
-})
-  
+  })
  })
 
  
