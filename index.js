@@ -8,14 +8,14 @@ const text = require('./const')
 const targetChatId = 'process.env.ID';
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
-bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложиту вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek \n РАЗМЕСТИТЬ НОВОСТЬ /now`))
+bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложиту вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /course  \n РАЗМЕСТИТЬ НОВОСТЬ /coursu`))
 bot.help((ctx) => ctx.reply(text.commands))
 
 // bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
 
 
 
-bot.command('rek', async (ctx) => {
+bot.command('course ', async (ctx) => {
     try{
    await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
 [
@@ -27,11 +27,11 @@ bot.command('rek', async (ctx) => {
     }
 })
 
-bot.command('now', async (ctx) => {
+bot.command('coursu', async (ctx) => {
     try{
    await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
 [
-    [Markup.button.callback('Сообщить новость','btn_2')]
+    [Markup.button.callback('Сообщить новость', 'btn_2')]
 ]
     ))
     } catch (e) {
@@ -58,15 +58,15 @@ bot.command('now', async (ctx) => {
 
 
 
-  bot.action('btn_2', async (ctx) => {
-    try {
+ bot.action('btn_2', async (ctx) => 
+     {
  await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
   
 })
-    } catch (e) {
-      console.error(e)
-    }
+  
  })
+
+ 
 
 
 
@@ -87,7 +87,7 @@ bot.command('addnote', (ctx) => {
 
 
   delete userStage[userId]; // сбрасываем состояние
-  ctx.reply('Замявка на рекламу отправлена!');
+  ctx.reply('Заявка на рекламу отправлена!');
 
 
 
