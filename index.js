@@ -8,7 +8,7 @@ const text = require('./const')
 const targetChatId = 'process.env.ID';
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
-bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложиту вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /course  \n РАЗМЕСТИТЬ НОВОСТЬ /coursu`))
+bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец' }.\n\n Предложиту вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek  \n РАЗМЕСТИТЬ НОВОСТЬ /coursu`))
 bot.help((ctx) => ctx.reply(text.commands))
 
 // bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
@@ -68,11 +68,6 @@ bot.command('coursu', async (ctx) => {
 
 
 
- bot.action('btn_2', async (ctx) => 
-     {
- await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
-  })
- })
 
  
 
@@ -101,24 +96,6 @@ bot.command('addnote', (ctx) => {
 
 
 
-
-const userStag = {}; 
-
-bot.command('addnote1', (ctx) => {
-  userStag[ctx.from.id] = 'waiting_for_text';
-  ctx.reply('Дата новости; \n\n Содержание новости;');
-});
-
-
-  const tex = ctx.message.text;
-  const forwardT = process.env.ID;
-
-  // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardT, `Новость:\n\n\ ${tex}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
-
-
-  delete userStag[userId]; // сбрасываем состояние
-  ctx.reply('Новость отправлена!');
 
 
 
