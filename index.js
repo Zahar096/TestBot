@@ -99,7 +99,7 @@ const userStag = {};
 bot.command('addnote1', async (ctx) => {
   userStag[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Дата новости; \n\n Содержание новости;');
-});
+
 
 
   const tex = ctx.message.text;
@@ -111,7 +111,7 @@ bot.command('addnote1', async (ctx) => {
 
   delete userStag[userId]; // сбрасываем состояние
   ctx.reply('Новость отправлена!');
-
+});
 
 
 
