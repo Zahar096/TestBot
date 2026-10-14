@@ -18,7 +18,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 const userStage = {}; 
 
-bot.command('form1', (ctx) => {
+bot.command('/form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
    ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 
