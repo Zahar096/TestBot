@@ -24,41 +24,35 @@ bot.command('form1', (ctx) => {
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
-bot.on('text', async (ctx) => {
-  const userId = ctx.from.id;
-  if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
-
-  const text = ctx.message.text;
-  const forwardTo = process.env.ID;
-
-  // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
-
-  delete userStage[userId]; // сбрасываем состояние
-  ctx.reply('Заявка на рекламу отправлена!');
-});
-
-
-
-const userStag = {}; 
-
 bot.command('form2', (ctx) => {
-  userStag[ctx.from.id] = 'waiting_for_text';
+  userStage[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Дата новости; \n\n Содержание новости;');
 });
 
+
+
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
-  if (userStag[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
-
-  const ttex = ctx.message.text;
-  const forwardTt = process.env.ID;
-
-  // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTt, `Новость:\n\n\ ${ttex}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
-
-  delete userStag[userId]; // сбрасываем состояние
-  ctx.reply('Новость отправлена!');
+  const stage = userStage[userId];
+  const forwardTo = process.env.ID;
+   if (stage === 'waiting_for_form1_text') {
+    const text = ctx.message.text;
+    const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
+    const username = ctx.from.username ? `@\${ctx.from.username}` : 'нет username';
+    const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
+    await bot.telegram.sendMessage(forwardTo, msg);
+    delete userStage[userId];
+    ctx.reply('Заявка на рекламу отправлена!');
+  } 
+   else if (stage === 'waiting_for_form2_text') {
+    const text = ctx.message.text;
+    const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
+    const username = ctx.from.username ? `@\${ctx.from.username}` : 'нет username';
+    const msg = `Новость:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
+    await bot.telegram.sendMessage(forwardTo, msg);
+    delete userStage[userId];
+    ctx.reply('Новость отправлена!');
+  }
 });
 
 
