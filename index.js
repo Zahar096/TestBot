@@ -38,7 +38,7 @@ bot.on('text', async (ctx) => {
    if (stage === 'waiting_for_form1_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-    const username = ctx.from.username ? `@\${ctx.from.username}` : 'нет username';
+    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(forwardTo, msg);
     delete userStage[userId];
@@ -47,7 +47,7 @@ bot.on('text', async (ctx) => {
    else if (stage === 'waiting_for_form2_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-    const username = ctx.from.username ? `@\${ctx.from.username}` : 'нет username';
+    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новость:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(forwardTo, msg);
     delete userStage[userId];
