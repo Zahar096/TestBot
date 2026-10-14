@@ -19,20 +19,20 @@ bot.help((ctx) => ctx.reply(text.commands))
 const userStage = {}; 
 
 bot.command('addnote', async (ctx) => {
-   userStage[ctx.from.id] = 'waiting_for_text';
+  userStage[ctx.from.id] = 'waiting_for_text';
   await ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
-
+});
 
 
   const text = ctx.message.text;
   const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, ` Новая рекламная заявка:\n\n${text}`);
+  await bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
+
 
   delete userStage[userId]; // сбрасываем состояние
- await ctx.reply('Заявка на рекламу отправлена!');
-});
+  ctx.reply('Заявка на рекламу отправлена!');
 
 
 
