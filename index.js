@@ -29,6 +29,14 @@ bot.command('form2', (ctx) => {
   ctx.reply('Введите дату новости; \n\n И содержание новости;\n\n  Если после отправки сообщения не пришло уведомление "Новость отправлена!" Попробуйте заново. /form2');
 });
 
+bot.command('reply', async (ctx) => {
+  const msgId = ctx.message.reply_to_message?.message_id;
+  if (!msgId) return ctx.reply('Ответьте на сообщение командой /reply');
+  const userId = ctx.from.id;
+  userStage[userId] = 'waiting_for_reply';
+  replyTarget[userId] = ctx.chat.id;
+  ctx.reply('Напишите текст ответа — он будет отправлен в группу.');
+});
 
 
 bot.on('text', async (ctx) => {
@@ -53,6 +61,14 @@ bot.on('text', async (ctx) => {
     delete userStage[userId];
     ctx.reply('Новость отправлена!');
   }
+  
+else if (stage === 'waiting_for_reply') {
+  const targetChat = replyTarget[userId];
+  await bot.telegram.sendMessage(targetChat, `Ответ от администратора:\n\n${text}`);
+  delete userStage[userId];
+  delete replyTarget[userId];
+  ctx.reply('Ответ отправлен в группу.');
+}
 });
 
 
