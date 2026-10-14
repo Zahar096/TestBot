@@ -11,62 +11,9 @@ const bot = new Telegraf (process.env.BOT_TOKEN)
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец'}.\n\n Предложиту вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /course  \n РАЗМЕСТИТЬ НОВОСТЬ /coursu`))
 bot.help((ctx) => ctx.reply(text.commands))
 
-// bot.hears('hi', (ctx) => ctx.reply('Здравствуйте'))
+ bot.hears('course', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote'))
+ bot.hears('coursu', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote1'))
 
-
-
-bot.command('course ', async (ctx) => {
-    try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
-[
-    [Markup.button.callback('Для рекламы', 'btn_1')]
-]
-    ))
-    } catch (e) {
-        console.error(e)
-    }
-})
-
-bot.command('coursu', async (ctx) => {
-    try{
-   await ctx.replyWithHTML('<b> Перейдите в форму заполнения </b>', Markup.inlineKeyboard(
-[
-    [Markup.button.callback('Сообщить новость', 'btn_2')]
-]
-    ))
-    } catch (e) {
-        console.error(e)
-    }
-})
-
-
-
-
-
-
-
-
-
- bot.action('btn_1', async (ctx) => 
-     {
- await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
-  
-})
-  
- })
-
-
-
-
- bot.action('btn_2', async (ctx) => 
-     {
- await ctx.replyWithHTML('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения /addnote',{
-  
-})
-  
- })
-
- 
 
 
 
