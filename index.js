@@ -12,7 +12,7 @@ bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_
 bot.help((ctx) => ctx.reply(text.commands))
 
  bot.hears('/rek', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для рекламы /form1'))
- bot.hears('/news', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для новостей /2form'))
+ bot.hears('/news', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для новостей /form2'))
 
 
 
@@ -42,7 +42,7 @@ bot.on('text', async (ctx) => {
 
 const userStag = {}; 
 
-bot.command('2form', (ctx) => {
+bot.command('form2', (ctx) => {
   userStag[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Дата новости; \n\n Содержание новости;');
 });
