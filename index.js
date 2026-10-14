@@ -12,7 +12,7 @@ bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_
 bot.help((ctx) => ctx.reply(text.commands))
 
  bot.hears('/rek', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для рекламы /form1'))
- bot.hears('/news', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для новостей /form2'))
+ bot.hears('/news', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для новостей /2form'))
 
 
 
@@ -42,7 +42,7 @@ bot.on('text', async (ctx) => {
 
 const userStag = {}; 
 
-bot.command('form2', (ctx) => {
+bot.command('2form', (ctx) => {
   userStag[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Дата новости; \n\n Содержание новости;');
 });
@@ -51,11 +51,11 @@ bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   if (userStag[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
-  const text = ctx.message.text;
-  const forwardTo = process.env.ID;
+  const ttex = ctx.message.text;
+  const forwardTt = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-  await bot.telegram.sendMessage(forwardTo, `Новость:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
+  await bot.telegram.sendMessage(forwardTt, `Новость:\n\n\ ${ttex}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
 
   delete userStag[userId]; // сбрасываем состояние
   ctx.reply('Новость отправлена!');
