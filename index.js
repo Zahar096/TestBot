@@ -24,9 +24,7 @@ bot.command('form1', (ctx) => {
   ctx.reply('Напишите текст заметки — я его сохраню и перешлю в канал.');
 });
 
-bot.on('text', async (ctx) => {
-  const userId = ctx.from.id;
-  if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
+
 
   const text = ctx.message.text;
   const forwardTo = process.env.ID;
@@ -36,7 +34,7 @@ bot.on('text', async (ctx) => {
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Заметка отправлена!');
-});
+;
 
 
 
