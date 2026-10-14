@@ -40,16 +40,16 @@ bot.on('text', async (ctx) => {
 
 
 
-
+const userStag = {}; 
 
 bot.command('form2', (ctx) => {
-  userStage[ctx.from.id] = 'waiting_for_text';
+  userStag[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Дата новости; \n\n Содержание новости;');
 });
 
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
-  if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
+  if (userStag[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
   const forwardTo = process.env.ID;
@@ -57,7 +57,7 @@ bot.on('text', async (ctx) => {
   // Отправляем «готовое» сообщение с вписанным текстом
   await bot.telegram.sendMessage(forwardTo, `Новость:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
 
-  delete userStage[userId]; // сбрасываем состояние
+  delete userStag[userId]; // сбрасываем состояние
   ctx.reply('Новость отправлена!');
 });
 
