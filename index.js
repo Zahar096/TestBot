@@ -24,9 +24,6 @@ bot.command('form1', (ctx) => {
   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
 });
 
-bot.hears('text', async (ctx) => {
-  const userId = ctx.from.id;
-  if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
   const forwardTo = process.env.ID;
@@ -36,7 +33,7 @@ bot.hears('text', async (ctx) => {
 
   delete userStage[userId]; // сбрасываем состояние
   ctx.reply('Заявка на рекламу отправлена!');
-});
+
 
 
 
