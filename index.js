@@ -17,6 +17,8 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 const userStage = {}; 
+  const text = ctx.message.text;
+  const forwardTo = process.env.ID;
 
 bot.command('form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
@@ -24,8 +26,7 @@ bot.command('form1', (ctx) => {
 });
 
 
-  const text = ctx.message.text;
-  const forwardTo = process.env.ID;
+
 
   // Отправляем «готовое» сообщение с вписанным текстом
    bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
