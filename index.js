@@ -46,28 +46,28 @@ bot.on('text', async (ctx) => {
   const stage = userStage[userId];
   const forwardTo = process.env.ID;
 
-  // ГЛАВНЫЙ БЛОК: нативный «Ответить» в группе -> сообщение админу
+  // ГЛАВНЫЙ БЛОК: нативный «Ответить» в группе -> пересылка админу
   if (ctx.message.reply_to_message && ctx.chat.type !== 'private') {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `🗣 Ответ в группе "${groupName}"\n\nID сообщения: ${repliedMsg.message_id}\n\nТекст ответа:\n\n${replyText}`;
 
-    console.log(`[DEBUG] Получен ответ в группе. Отправляем админу (ID=${forwardTo})...`);
+    console.log(`[DEBUG] Получен ответ в группе. Пытаемся отправить админу (forwardTo=${forwardTo})...`);
 
     try {
-      await bot.telegram.sendMessage(forwardTo, adminMsg, { parse_mode: 'HTML' });
+      // ВАЖНО: forwardTo должен быть числом (например, 123456789), не строкой
+      await bot.telegram.sendMessage(forwardTo, adminMsg);
       console.log('[DEBUG] Ответ успешно отправлен админу.');
-      // Можно добавить тихое подтверждение в группу, если бот админ:
-      // await ctx.replyWithMarkdown('✅ Ответ отправлен администратору.');
     } catch (e) {
       console.error('[ERROR] Не удалось отправить ответ админу:', e.description || e);
-      // Важно: тут ты увидишь реальную ошибку (например, chat not found)
+      // Опционально: можно написать в группу, если бот админ
+      // await ctx.reply(`⚠️ Не удалось переслать ответ администратору. Ошибка: ${e.description}`);
     }
-    return; // Прерываем, чтобы не мешать остальным веткам
+    return; // Дальше не обрабатываем, чтобы не мешать формам
   }
 
-  // Дальше: обработка форм и /reply (как раньше)
+  // Дальше: обработка форм и /reply (без изменений)
   if (stage === 'waiting_for_form1_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
@@ -110,7 +110,6 @@ bot.on('text', async (ctx) => {
     }
   }
 });
-
 
 
 bot.launch()
