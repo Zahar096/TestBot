@@ -19,7 +19,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 const userStage = {}; 
 
-bot.command('addnote', (ctx) => {
+bot.command('form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
   ctx.reply('Напишите текст заметки — я его сохраню и перешлю в канал.');
 });
@@ -29,7 +29,7 @@ bot.on('text', async (ctx) => {
   if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
   const text = ctx.message.text;
-  const forwardTo = process.env.FORWARD_TO_CHAT_ID;
+  const forwardTo = process.env.ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
   await bot.telegram.sendMessage(forwardTo, ` Новая заметка:\n\n${text}`);
