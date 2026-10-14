@@ -32,7 +32,9 @@ bot.command('form2', (ctx) => {
 
 bot.command('reply', async (ctx) => {
   const replyMsg = ctx.message.reply_to_message;
-  if (!replyMsg) return ctx.reply('Ответьте на сообщение командой /reply');
+  if (!replyMsg) {
+    return ctx.reply('Ответьте на сообщение и напишите /reply');
+  }
   const userId = ctx.from.id;
   userStage[userId] = 'waiting_for_reply';
   replyTarget[userId] = ctx.chat.id;
@@ -44,43 +46,71 @@ bot.on('text', async (ctx) => {
   const stage = userStage[userId];
   const forwardTo = process.env.ID;
 
-  // Обработка ответа на сообщение в группе (нативный ответ, без команды)
-  if (ctx.message.reply_to_message) {
+  // ГЛАВНЫЙ БЛОК: нативный «Ответить» в группе -> сообщение админу
+  if (ctx.message.reply_to_message && ctx.chat.type !== 'private') {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
-    const adminMsg = `Ответ на сообщение в группе "${groupName}" (ID сообщения: ${repliedMsg.message_id}):\n\n\${replyText}`;
-    await bot.telegram.sendMessage(forwardTo, adminMsg);
-    return; // Прерываем дальнейшую обработку, чтобы не конфликтовать с формами
+    const adminMsg = `🗣 Ответ в группе "${groupName}"\n\nID сообщения: ${repliedMsg.message_id}\n\nТекст ответа:\n\n${replyText}`;
+
+    console.log(`[DEBUG] Получен ответ в группе. Отправляем админу (ID=${forwardTo})...`);
+
+    try {
+      await bot.telegram.sendMessage(forwardTo, adminMsg, { parse_mode: 'HTML' });
+      console.log('[DEBUG] Ответ успешно отправлен админу.');
+      // Можно добавить тихое подтверждение в группу, если бот админ:
+      // await ctx.replyWithMarkdown('✅ Ответ отправлен администратору.');
+    } catch (e) {
+      console.error('[ERROR] Не удалось отправить ответ админу:', e.description || e);
+      // Важно: тут ты увидишь реальную ошибку (например, chat not found)
+    }
+    return; // Прерываем, чтобы не мешать остальным веткам
   }
 
+  // Дальше: обработка форм и /reply (как раньше)
   if (stage === 'waiting_for_form1_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-    const username = ctx.from.username ? `@\${ctx.from.username}` : 'нет username';
+    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
-    await bot.telegram.sendMessage(forwardTo, msg);
-    delete userStage[userId];
-    ctx.reply('Заявка на рекламу отправлена!');
+    try {
+      await bot.telegram.sendMessage(forwardTo, msg);
+      delete userStage[userId];
+      ctx.reply('Заявка на рекламу отправлена!');
+    } catch (e) {
+      console.error('Ошибка отправки заявки:', e);
+      ctx.reply('Произошла ошибка при отправке заявки. Попробуйте позже.');
+    }
   } 
   else if (stage === 'waiting_for_form2_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-    const username = ctx.from.username ? `@\${ctx.from.username}` : 'нет username';
+    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новость:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
-    await bot.telegram.sendMessage(forwardTo, msg);
-    delete userStage[userId];
-    ctx.reply('Новость отправлена!');
+    try {
+      await bot.telegram.sendMessage(forwardTo, msg);
+      delete userStage[userId];
+      ctx.reply('Новость отправлена!');
+    } catch (e) {
+      console.error('Ошибка отправки новости:', e);
+      ctx.reply('Произошла ошибка при отправке новости. Попробуйте позже.');
+    }
   }
   else if (stage === 'waiting_for_reply') {
     const text = ctx.message.text;
     const targetChat = replyTarget[userId];
-    await bot.telegram.sendMessage(targetChat, `Ответ от администратора:\n\n\${text}`);
-    delete userStage[userId];
-    delete replyTarget[userId];
-    ctx.reply('Ответ отправлен в группу.');
+    try {
+      await bot.telegram.sendMessage(targetChat, `Ответ от администратора:\n\n${text}`);
+      delete userStage[userId];
+      delete replyTarget[userId];
+      ctx.reply('Ответ отправлен в группу.');
+    } catch (e) {
+      console.error('Ошибка отправки ответа в группу:', e);
+      ctx.reply('Не удалось отправить ответ в группу. Проверьте, что бот — админ в группе.');
+    }
   }
 });
+
 
 
 bot.launch()
