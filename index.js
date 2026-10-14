@@ -18,6 +18,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 const userStage = {}; 
+const replyTarget = {};
 
 bot.command('form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_form1_text';
@@ -30,8 +31,8 @@ bot.command('form2', (ctx) => {
 });
 
 bot.command('reply', async (ctx) => {
-  const msgId = ctx.message.reply_to_message?.message_id;
-  if (!msgId) return ctx.reply('Ответьте на сообщение командой /reply');
+  const replyMsg = ctx.message.reply_to_message;
+  if (!replyMsg) return ctx.reply('Ответьте на сообщение командой /reply');
   const userId = ctx.from.id;
   userStage[userId] = 'waiting_for_reply';
   replyTarget[userId] = ctx.chat.id;
@@ -43,6 +44,16 @@ bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   const stage = userStage[userId];
   const forwardTo = process.env.ID;
+
+    if (ctx.message.reply_to_message) {
+    const repliedMsg = ctx.message.reply_to_message;
+    const replyText = ctx.message.text;
+    const groupName = ctx.chat.title || 'Группа';
+    const adminMsg = `Ответ на сообщение в группе "${groupName}" (ID сообщения: ${repliedMsg.message_id}):\n\n${replyText}`;
+    await bot.telegram.sendMessage(forwardTo, adminMsg);
+    return; 
+  }
+
    if (stage === 'waiting_for_form1_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
