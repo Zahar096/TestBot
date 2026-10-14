@@ -17,7 +17,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 
-const userStage = {}; 
+
 
 bot.command('form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
