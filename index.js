@@ -16,25 +16,27 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 
-const userStage = {}; 
-  const text = ctx.message.text;
-  const forwardTo = process.env.ID;
 
-bot.command('form1', (ctx) => {
+const userStage = {}; 
+
+bot.command('addnote', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_text';
-   ctx.reply('Введите название компании; \n\n Раскажите что хотите рекламировать;\n\n И напишите свой номер телефона.');
+  ctx.reply('Напишите текст заметки — я его сохраню и перешлю в канал.');
 });
 
+bot.on('text', async (ctx) => {
+  const userId = ctx.from.id;
+  if (userStage[userId] !== 'waiting_for_text') return; // игнорируем, если не ждём текст
 
-
+  const text = ctx.message.text;
+  const forwardTo = process.env.FORWARD_TO_CHAT_ID;
 
   // Отправляем «готовое» сообщение с вписанным текстом
-   bot.telegram.sendMessage(forwardTo, `Новая рекламная заявка:\n\n\ ${text}\n\nОтправитель: ${ctx.from.first_name} ${ctx.from.last_name ? ctx.from.last_name : ''} (@${ctx.from.username ? ctx.from.username : 'нет username'}) \nID: ${ctx.from.id}`);
+  await bot.telegram.sendMessage(forwardTo, ` Новая заметка:\n\n${text}`);
 
-
-  delete userStage[ctx.from.id]; // сбрасываем состояние
-   ctx.reply('Заявка на рекламу отправлена!');
-
+  delete userStage[userId]; // сбрасываем состояние
+  ctx.reply('Заметка отправлена!');
+});
 
 
 
