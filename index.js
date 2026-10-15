@@ -58,7 +58,7 @@ bot.on('text', async (ctx) => {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
     const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
-    const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
+    const msg = `<span class="tg-spoiler">Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}</span>`;
     await bot.telegram.sendMessage(forwardTo, msg);
     delete userStage[userId];
     ctx.reply('Заявка на рекламу отправлена!');
