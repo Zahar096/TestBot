@@ -8,6 +8,10 @@ const text = require('./const')
 const targetChatId = process.env.ID;
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
+
+const userStage = {}; 
+const msgIdToUserId = {};
+
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец'}.\n\n Предложите вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek  \n РАЗМЕСТИТЬ НОВОСТЬ /news`))
 bot.help((ctx) => ctx.reply(text.commands))
 
@@ -17,8 +21,7 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 
-const userStage = {}; 
-const replyTarget = {};
+
 
 bot.command('form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_form1_text';
@@ -36,36 +39,67 @@ bot.command('form2', (ctx) => {
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   const stage = userStage[userId];
-  const forwardTo = userId;
+    
+
+ 
 
     if (ctx.message.reply_to_message) {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
-    const groupName = ctx.chat.title || 'Группа';
-    const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-    await bot.telegram.sendMessage(forwardTo, adminMsg);
-    delete userStage[userId];
-    ctx.reply('Ответ отправлен в чат пользователя');
-    return; 
-  }
+    
+
+    const originalAuthorId = msgIdToUserId[repliedMsg.message_id];
+    
+   if (originalAuthorId) {
+      const adminMsg = `Ответ от администратора:\n\n${replyText}`;
+      try {
+        await bot.telegram.sendMessage(originalAuthorId, adminMsg);
+        ctx.reply('Ответ отправлен в чат пользователя.');
+      } catch (e) {
+        console.error('Не удалось отправить ответ пользователю:', e.description);
+        ctx.reply('Не удалось отправить ответ пользователю. Возможно, он не запускал бота (не нажимал Start).');
+      }
+      return;
+    }
+    }
+
+
 
    if (stage === 'waiting_for_form1_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
     const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
-    await bot.telegram.sendMessage(targetChatId, msg);
-    delete userStage[userId];
-    ctx.reply('Заявка на рекламу отправлена! Ждите ответа от администраторов');
+
+     try {
+      const sent = await bot.telegram.sendMessage(targetChatId, msg);
+      msgIdToUserId[sent.message_id] = userId;
+      delete userStage[userId];
+      ctx.reply('Заявка на рекламу отправлена! Ждите ответа от администраторов.');
+    } catch (e) {
+      console.error('Ошибка отправки заявки:', e);
+      ctx.reply('Произошла ошибка при отправке заявки. Попробуйте позже.');
+    }
+    return;
   } 
+
+
    else if (stage === 'waiting_for_form2_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
     const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новость:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
-    await bot.telegram.sendMessage(targetChatId, msg);
-    delete userStage[userId];
-    ctx.reply('Новость отправлена! Ждите ответа от администраторов');
+    
+   try {
+      const sent = await bot.telegram.sendMessage(targetChatId, msg);
+      msgIdToUserId[sent.message_id] = userId;
+      delete userStage[userId];
+      ctx.reply('Новость отправлена! Ждите ответа от администраторов.');
+    } catch (e) {
+      console.error('Ошибка отправки новости:', e);
+      ctx.reply('Произошла ошибка при отправке новости. Попробуйте позже.');
+    }
+    return;
   }
 });
 
