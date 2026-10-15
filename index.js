@@ -49,10 +49,10 @@ bot.on('text', async (ctx) => {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
-    const adminMsg = `Ответ на сообщение от администратора":\n\n${replyText}`;
+    const adminMsg = `Ответ на сообщение от администратора \n\n${replyText}`;
     await bot.telegram.sendMessage(forwardTo, adminMsg);
     delete userStage[userId];
-    ctx.reply('Ответ отправлен в группу.');
+    ctx.reply('Ответ отправлен в чат пользователя.');
     return; 
   }
 
@@ -63,7 +63,7 @@ bot.on('text', async (ctx) => {
     const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(targetChatId, msg);
     delete userStage[userId];
-    ctx.reply('Заявка на рекламу отправлена!');
+    ctx.reply('Заявка на рекламу отправлена! Ждите ответа от администраторов');
   } 
    else if (stage === 'waiting_for_form2_text') {
     const text = ctx.message.text;
@@ -72,16 +72,10 @@ bot.on('text', async (ctx) => {
     const msg = `Новость:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(targetChatId, msg);
     delete userStage[userId];
-    ctx.reply('Новость отправлена!');
+    ctx.reply('Новость отправлена! Ждите ответа от администраторов');
   }
   
-else if (stage === 'waiting_for_reply') {
-  const targetChat = replyTarget[userId];
-  await bot.telegram.sendMessage(targetChat, `Ответ от администратора:\n\n${text}`);
-  delete userStage[userId];
-  delete replyTarget[userId];
-  ctx.reply('Ответ отправлен в группу.');
-}
+
 });
 
 
