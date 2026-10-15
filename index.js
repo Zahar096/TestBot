@@ -50,7 +50,7 @@ bot.on('text', async (ctx) => {
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение "${groupName}" (ID сообщения: ${repliedMsg.message_id}):\n\n${replyText}`;
-    await bot.telegram.sendMessage(targetChatId, adminMsg);
+    await bot.telegram.sendMessage(forwardTo, adminMsg);
     return; 
   }
 
@@ -59,7 +59,7 @@ bot.on('text', async (ctx) => {
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
     const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
     const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
-    await bot.telegram.sendMessage(forwardTo, msg);
+    await bot.telegram.sendMessage(targetChatId, msg);
     delete userStage[userId];
     ctx.reply('Заявка на рекламу отправлена!');
   } 
