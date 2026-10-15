@@ -36,14 +36,14 @@ bot.command('form2', (ctx) => {
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   const stage = userStage[userId];
-  const forwardTo = ctx.userId;
+  const forwardTo = userStage[userId];
 
     if (ctx.message.reply_to_message) {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-    await bot.telegram.sendMessage(userStage[userId], adminMsg);
+    await bot.telegram.sendMessage(forwardTo, adminMsg);
     delete userStage[userId];
     ctx.reply('Ответ отправлен в чат пользователя');
     return; 
