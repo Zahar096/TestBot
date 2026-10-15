@@ -36,7 +36,7 @@ bot.command('form2', (ctx) => {
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   const stage = userStage[userId];
-  const forwardTo = ctx.chat.title;
+  const forwardTo = ctx.chat.id;
 
     if (ctx.message.reply_to_message) {
     const repliedMsg = ctx.message.reply_to_message;
