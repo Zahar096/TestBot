@@ -35,38 +35,38 @@ bot.command('form2', (ctx) => {
 
 
 bot.on('text', async (msg) => {
-  const userId = ctx.from.id;
+  const userId = msg.from.id;
   const stage = userStage[userId];
   const forwardTo = msg.chat.id;
 
-    if (ctx.message.reply_to_message) {
-    const repliedMsg = ctx.message.reply_to_message;
-    const replyText = ctx.message.text;
-    const groupName = ctx.chat.title || 'Группа';
+    if (msg.message.reply_to_message) {
+    const repliedMsg = msg.message.reply_to_message;
+    const replyText = msg.message.text;
+    const groupName = msg.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
     await bot.telegram.sendMessage(forwardTo, adminMsg);
     delete userStage[userId];
-    ctx.reply('Ответ отправлен в чат пользователя');
+    msg.reply('Ответ отправлен в чат пользователя');
     return; 
   }
 
    if (stage === 'waiting_for_form1_text') {
-    const text = ctx.message.text;
-    const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
+    const text = msg.message.text;
+    const name = `${msg.from.first_name} ${msg.from.last_name || ''}`.trim();
+    const username = msg.from.username ? `@${msg.from.username}` : 'нет username';
     const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(targetChatId, msg);
     delete userStage[userId];
-    ctx.reply('Заявка на рекламу отправлена! Ждите ответа от администраторов');
+    msg.reply('Заявка на рекламу отправлена! Ждите ответа от администраторов');
   } 
    else if (stage === 'waiting_for_form2_text') {
-    const text = ctx.message.text;
-    const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
+    const text = msg.message.text;
+    const name = `${msg.from.first_name} ${msg.from.last_name || ''}`.trim();
+    const username = msg.from.username ? `@${msg.from.username}` : 'нет username';
     const msg = `Новость:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(targetChatId, msg);
     delete userStage[userId];
-    ctx.reply('Новость отправлена! Ждите ответа от администраторов');
+    msg.reply('Новость отправлена! Ждите ответа от администраторов');
   }
 });
 
