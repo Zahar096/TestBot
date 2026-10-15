@@ -49,8 +49,10 @@ bot.on('text', async (ctx) => {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
-    const adminMsg = `Ответ на сообщение "${groupName}":\n\n${replyText}`;
+    const adminMsg = `Ответ на сообщение от администратора":\n\n${replyText}`;
     await bot.telegram.sendMessage(forwardTo, adminMsg);
+    delete userStage[userId];
+    ctx.reply('Ответ отправлен в группу.');
     return; 
   }
 
@@ -75,7 +77,7 @@ bot.on('text', async (ctx) => {
   
 else if (stage === 'waiting_for_reply') {
   const targetChat = replyTarget[userId];
-  await bot.telegram.sendMessage(targetChatId, `Ответ от администратора:\n\n${text}`);
+  await bot.telegram.sendMessage(targetChat, `Ответ от администратора:\n\n${text}`);
   delete userStage[userId];
   delete replyTarget[userId];
   ctx.reply('Ответ отправлен в группу.');
