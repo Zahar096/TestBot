@@ -30,14 +30,7 @@ bot.command('form2', (ctx) => {
   ctx.reply('Введите дату новости; \n\n И содержание новости;\n\n  Если после отправки сообщения не пришло уведомление "Новость отправлена!" Попробуйте заново. /form2');
 });
 
-bot.command('reply', async (ctx) => {
-  const replyMsg = ctx.message.reply_to_message;
-  if (!replyMsg) return ctx.reply('Ответьте на сообщение командой /reply');
-  const userId = ctx.from.id;
-  userStage[userId] = 'waiting_for_reply';
-  replyTarget[userId] = ctx.chat.id;
-  ctx.reply('Напишите текст ответа — он будет отправлен в группу.');
-});
+
 
 
 bot.on('text', async (ctx) => {
@@ -49,10 +42,10 @@ bot.on('text', async (ctx) => {
     const repliedMsg = ctx.message.reply_to_message;
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
-    const adminMsg = `Ответ на сообщение от администратора \n\n${replyText}`;
+    const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
     await bot.telegram.sendMessage(forwardTo, adminMsg);
     delete userStage[userId];
-    ctx.reply('Ответ отправлен в чат пользователя.');
+    ctx.reply('Ответ отправлен в чат пользователя');
     return; 
   }
 
@@ -74,10 +67,7 @@ bot.on('text', async (ctx) => {
     delete userStage[userId];
     ctx.reply('Новость отправлена! Ждите ответа от администраторов');
   }
-  
-
 });
-
 
 
 bot.launch()
