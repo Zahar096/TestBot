@@ -37,7 +37,11 @@ bot.command('form2', (ctx) => {
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   const stage = userStage[userId];
-  const originalAuthorId = msgIdToUserId[repliedMsg.message_id];
+ const originalAuthorId = msgIdToUserId[repliedMsg.message_id];
+
+    if (originalAuthorId) {
+      const adminMsg = `Ответ от администратора:\n\n${replyText}`;
+}
 
     if (ctx.message.reply_to_message) {
     const repliedMsg = ctx.message.reply_to_message;
