@@ -5,7 +5,7 @@ const { message } = require('telegraf/filters')
 require('dotenv').config()
 const text = require('./const')
 
-const targetChatId = 'process.env.ID';
+const targetChatId = process.env.ID;
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец'}.\n\n Предложиту вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek  \n РАЗМЕСТИТЬ НОВОСТЬ /news`))
@@ -58,7 +58,7 @@ bot.on('text', async (ctx) => {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
     const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
-    const msg = `<span class="tg-spoiler">Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}</span>`;
+    const msg = `Новая рекламная заявка:\n\n${text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`;
     await bot.telegram.sendMessage(forwardTo, msg);
     delete userStage[userId];
     ctx.reply('Заявка на рекламу отправлена!');
