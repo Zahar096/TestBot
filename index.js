@@ -28,7 +28,7 @@ bot.command('form1', (ctx) => {
 
 bot.command('form2', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_form2_text';
-  ctx.reply('Введите дату новости; \n\n И содержание новости;\n\n  Если после отправки сообщения не пришло уведомление "Новость отправлена!" Попробуйте заново. /form2');
+  ctx.reply('Введите дату новости (необязательно); \n\n И содержание новости;\n\n  Если после отправки сообщения не пришло уведомление "Новость отправлена!" Попробуйте заново. /form2');
 });
 
 
@@ -44,7 +44,7 @@ bot.on('text', async (ctx) => {
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-    await bot.telegram.sendMessage(forwardTo, adminMsg);
+    await bot.telegram.forward_message(forwardTo, adminMsg);
     delete userStage[userId];
     ctx.reply('Ответ отправлен в чат пользователя');
     return; 
