@@ -9,6 +9,14 @@ const targetChatId = process.env.ID;
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
 
+let userLastMessageId = null;
+let adminLastMessageId = null;
+
+bot.on('message', (ctx) => {
+
+  userLastMessageId = ctx.message.messageId;
+});
+
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец'}.\n\n Предложите вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek  \n РАЗМЕСТИТЬ НОВОСТЬ /news`))
 bot.help((ctx) => ctx.reply(text.commands))
 
@@ -16,7 +24,7 @@ bot.help((ctx) => ctx.reply(text.commands))
  bot.hears('/news', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для новостей /form2'))
 
 
-
+ 
 
 const userStage = {}; 
 const replyTarget = {};
@@ -44,7 +52,7 @@ bot.on('message', async (ctx) => {
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-     await ctx.telegram.forwardMessage(forwardTo, ctx.chat.id, messageId);
+bot.telegram.sendMessage(ctx.chat.id, adminMsg, { reply_to_message_id: repliedMsg.message_id });
     delete userStage[userId];
     ctx.reply('Ответ отправлен в чат пользователя');
     return; 
