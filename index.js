@@ -49,7 +49,7 @@ bot.on('text', async (ctx) => {
       const msg = `Ответ от ${adminName}:\n\n${replyText}`;
 
       try {
-        await bot.telegram.sendMessage(originalAuthorId, msg);
+        await bot.telegram.sendMessage(userId, msg);
         // Можно добавить подтверждение админу в группе
         await ctx.reply('✅ Ответ отправлен пользователю.');
       } catch (e) {
@@ -70,7 +70,6 @@ bot.on('text', async (ctx) => {
     `ID: ${userId}`,
     `Имя: ${userName}`,
     `Username: ${username}`,
-    `---`,
     ctx.message.text,
   ].join('\n');
 
