@@ -51,7 +51,7 @@ bot.on('text', async (ctx) => {
       try {
         await bot.telegram.sendMessage(originalAuthorId, msg);
         // Можно добавить подтверждение админу в группе
-        // await ctx.reply('✅ Ответ отправлен пользователю.');
+        await ctx.reply('✅ Ответ отправлен пользователю.');
       } catch (e) {
         console.error('Не удалось отправить ответ пользователю:', e.description);
         await ctx.reply(
@@ -75,7 +75,7 @@ bot.on('text', async (ctx) => {
   ].join('\n');
 
   try {
-    const sent = await bot.telegram.sendMessage(ID, payload);
+    const sent = await bot.telegram.sendMessage(targetChatId, payload);
     // Сохраняем связь: сообщение в группе → пользователь
     msgIdToUserId[sent.message_id] = userId;
     await ctx.reply('Ваше сообщение отправлено админам. Ждите ответа.');
