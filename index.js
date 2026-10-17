@@ -1,4 +1,5 @@
 
+
 const { Telegraf} = require('telegraf')
 const { Markup } = require('telegraf/markup');
 const { message } = require('telegraf/filters')
@@ -9,12 +10,6 @@ const targetChatId = process.env.ID;
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
 
-
-bot.on('message', (ctx) => {
-
-  userLastMessageId = ctx.message.messageId;
-});
-
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец'}.\n\n Предложите вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek  \n РАЗМЕСТИТЬ НОВОСТЬ /news`))
 bot.help((ctx) => ctx.reply(text.commands))
 
@@ -22,7 +17,7 @@ bot.help((ctx) => ctx.reply(text.commands))
  bot.hears('/news', (ctx) => ctx.reply('Форму заполнения нужно составить в одном сообщении. Перейти к форме заполнения для новостей /form2'))
 
 
- 
+
 
 const userStage = {}; 
 const replyTarget = {};
@@ -34,13 +29,13 @@ bot.command('form1', (ctx) => {
 
 bot.command('form2', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_form2_text';
-  ctx.reply('Введите дату новости (необязательно); \n\n И содержание новости;\n\n  Если после отправки сообщения не пришло уведомление "Новость отправлена!" Попробуйте заново. /form2');
+  ctx.reply('Введите дату новости; \n\n И содержание новости;\n\n  Если после отправки сообщения не пришло уведомление "Новость отправлена!" Попробуйте заново. /form2');
 });
 
 
 
 
-bot.on('message', async (ctx) => {
+bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   const stage = userStage[userId];
   const forwardTo = ctx.from.id;
@@ -50,7 +45,7 @@ bot.on('message', async (ctx) => {
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-     await ctx.telegram.forwardMessage(forwardTo, adminMsg);
+    await bot.telegram.sendMessage(forwardTo, adminMsg);
     delete userStage[userId];
     ctx.reply('Ответ отправлен в чат пользователя');
     return; 
@@ -77,10 +72,10 @@ bot.on('message', async (ctx) => {
 });
 
 
-
 bot.launch()
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
+
 
