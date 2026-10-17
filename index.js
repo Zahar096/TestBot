@@ -52,26 +52,12 @@ bot.on('message', async (ctx) => {
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-     await ctx.telegram.forwardMessage(forwardTo, ctx.chat.id, messageId);
+     await ctx.telegram.forwardMessage(forwardTo, adminMsg, repliedMsg.message_id);
     delete userStage[userId];
     ctx.reply('Ответ отправлен в чат пользователя');
     return; 
   }
-bot.action('wait_for_admin', (ctx) => {
-  // Ждём, пока не придёт сообщение из группы
-  bot.telegram.waitForMessage(process.env.ID, (err, message) => {
-    if (err) {
-      ctx.reply('Ошибка при ожидании ответа.');
-    } else {
-      // Пересылаем ответ обратно пользователю
-      bot.telegram.sendMessage(ctx.chat.id, message.text, (err, reply) => {
-        if (err) {
-          ctx.reply('Ошибка при отправке ответа пользователю.');
-        }
-      });
-  }
-  });
-});
+
    if (stage === 'waiting_for_form1_text') {
     const text = ctx.message.text;
     const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
