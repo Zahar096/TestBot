@@ -42,7 +42,7 @@ bot.command('form2', (ctx) => {
 
 bot.action('wait_for_admin', (ctx) => {
   // Ждём, пока не придёт сообщение из группы
-  bot.telegram.waitForMessage(ADMIN_CHAT_ID, (err, message) => {
+  bot.telegram.waitForMessage(process.env.ID, (err, message) => {
     if (err) {
       ctx.reply('Ошибка при ожидании ответа.');
     } else {
