@@ -75,7 +75,7 @@ bot.on('text', async (ctx) => {
   ].join('\n');
 
   try {
-    const sent = await bot.telegram.sendMessage(ADMIN_CHAT_ID, payload);
+    const sent = await bot.telegram.sendMessage(ID, payload);
     // Сохраняем связь: сообщение в группе → пользователь
     msgIdToUserId[sent.message_id] = userId;
     await ctx.reply('Ваше сообщение отправлено админам. Ждите ответа.');
