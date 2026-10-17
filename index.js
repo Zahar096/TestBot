@@ -40,7 +40,21 @@ bot.command('form2', (ctx) => {
 });
 
 
-
+bot.action('wait_for_admin', (ctx) => {
+  // Ждём, пока не придёт сообщение из группы
+  bot.telegram.waitForMessage(ADMIN_CHAT_ID, (err, message) => {
+    if (err) {
+      ctx.reply('Ошибка при ожидании ответа.');
+    } else {
+      // Пересылаем ответ обратно пользователю
+      bot.telegram.sendMessage(ctx.chat.id, message.text, (err, reply) => {
+        if (err) {
+          ctx.reply('Ошибка при отправке ответа пользователю.');
+        }
+      });
+  }
+  });
+});
 
 bot.on('message', async (ctx) => {
   const userId = ctx.from.id;
