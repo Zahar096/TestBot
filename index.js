@@ -9,8 +9,6 @@ const targetChatId = process.env.ID;
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
 
-let userLastMessageId = null;
-let adminLastMessageId = null;
 
 bot.on('message', (ctx) => {
 
