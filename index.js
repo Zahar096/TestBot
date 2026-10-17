@@ -10,7 +10,6 @@ const targetChatId = process.env.ID;
 
 const bot = new Telegraf (process.env.BOT_TOKEN)
 
-const msgIdToUserId = {};
 
 bot.start((ctx) => ctx.reply(`Здравствуйте ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Незнакомец'}.\n\n Предложите вашу новость или закажите у нас рекламу.\n\n ПРЕДЛОЖИТЬ РЕКЛАМУ /rek  \n РАЗМЕСТИТЬ НОВОСТЬ /news`))
 bot.help((ctx) => ctx.reply(text.commands))
@@ -22,7 +21,6 @@ bot.help((ctx) => ctx.reply(text.commands))
 
 
 const userStage = {}; 
-const replyTarget = {};
 
 bot.command('form1', (ctx) => {
   userStage[ctx.from.id] = 'waiting_for_form1_text';
@@ -38,51 +36,55 @@ bot.command('form2', (ctx) => {
 
 
 bot.on('text', async (ctx) => {
-  const userId = ctx.from.id;
-   if (ctx.message.reply_to_message) {
-    const repliedMsg = ctx.message.reply_to_message;
-    const originalAuthorId = msgIdToUserId[repliedMsg.message_id];
+  // Обработка ответа администратора в целевом чате
+  if (String(ctx.chat.id) === String(targetChatId) &&
+      ctx.message.reply_to_message) {
+    const originalText = ctx.message.reply_to_message.text || '';
+    const match = originalText.match(/\nID: (\d+)/);
 
-    if (originalAuthorId) {
-      const replyText = ctx.message.text;
-      const adminName = ctx.from.first_name || 'Администратор';
-      const msg = `Ответ от ${adminName}:\n\n${replyText}`;
-
-      try {
-        await bot.telegram.sendMessage(userId, msg);
-        // Можно добавить подтверждение админу в группе
-        await ctx.reply('✅ Ответ отправлен пользователю.');
-      } catch (e) {
-        console.error('Не удалось отправить ответ пользователю:', e.description);
-        await ctx.reply(
-          '⚠️ Не удалось отправить ответ: пользователь не запускал бота (не нажимал Start).'
-        );
-      }
-      return;
+    if (!match) {
+      return ctx.reply('Не удалось определить пользователя для ответа.');
     }
+
+    const userId = Number(match[1]);
+    const replyText = ctx.message.text;
+
+    await bot.telegram.sendMessage(
+      userId,
+      `Ответ от администрации:\n\n${replyText}`
+    );
+
+    return ctx.reply('Ответ отправлен пользователю.');
   }
 
-  // 2. Обычное сообщение от пользователя — пересылаем в группу админов
-  const userName = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
-  const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
-  const payload = [
-    `📩 Новое сообщение от пользователя`,
-    `ID: ${userId}`,
-    `Имя: ${userName}`,
-    `Username: ${username}`,
-    ctx.message.text,
-  ].join('\n');
+  // Ниже — обработка сообщений пользователей по формам
+  const userId = ctx.from.id;
+  const stage = userStage[userId];
 
-  try {
-    const sent = await bot.telegram.sendMessage(targetChatId, payload);
-    // Сохраняем связь: сообщение в группе → пользователь
-    msgIdToUserId[sent.message_id] = userId;
-    await ctx.reply('Ваше сообщение отправлено админам. Ждите ответа.');
-  } catch (e) {
-    console.error('Ошибка отправки в группу админов:', e);
-    await ctx.reply('Произошла ошибка при отправке сообщения. Попробуйте позже.');
+  if (stage === 'waiting_for_form1_text' ||
+      stage === 'waiting_for_form2_text') {
+    const name = `${ctx.from.first_name} ${ctx.from.last_name || ''}`.trim();
+    const username = ctx.from.username ? `@${ctx.from.username}` : 'нет username';
+
+    const title = stage === 'waiting_for_form1_text'
+      ? 'Новая рекламная заявка'
+      : 'Новость';
+
+    await bot.telegram.sendMessage(
+      targetChatId,
+      `${title}:\n\n${ctx.message.text}\n\nОтправитель: ${name} (${username})\nID: ${userId}`
+    );
+
+    delete userStage[userId];
+
+    return ctx.reply(
+      stage === 'waiting_for_form1_text'
+        ? 'Заявка на рекламу отправлена! Ждите ответа от администраторов.'
+        : 'Новость отправлена! Ждите ответа от администраторов.'
+    );
   }
 });
+
 
 bot.launch()
 
