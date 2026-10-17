@@ -52,7 +52,7 @@ bot.on('message', async (ctx) => {
     const replyText = ctx.message.text;
     const groupName = ctx.chat.title || 'Группа';
     const adminMsg = `Ответ на сообщение от администратора: \n\n${replyText}`;
-bot.telegram.sendMessage(ctx.chat.id, adminMsg, { reply_to_message_id: repliedMsg.message_id });
+     await ctx.telegram.forwardMessage(forwardTo, ctx.chat.id, messageId);
     delete userStage[userId];
     ctx.reply('Ответ отправлен в чат пользователя');
     return; 
